@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10er Soundboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f4;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        button {
+            height: 80px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎵 Wolfgangs Soundboard 🎵</h1>
+
+<div class="container">
+    <button style="background:#e74c3c" onclick="spieleTon(262)">1</button>
+    <button style="background:#e67e22" onclick="spieleTon(294)">2</button>
+    <button style="background:#f1c40f" onclick="spieleTon(330)">3</button>
+    <button style="background:#2ecc71" onclick="spieleTon(349)">4</button>
+    <button style="background:#1abc9c" onclick="spieleTon(392)">5</button>
+    <button style="background:#3498db" onclick="spieleTon(440)">6</button>
+    <button style="background:#9b59b6" onclick="spieleTon(494)">7</button>
+    <button style="background:#34495e" onclick="spieleTon(523)">8</button>
+    <button style="background:#d35400" onclick="spieleTon(587)">9</button>
+    <button style="background:#c0392b" onclick="spieleTon(659)">10</button>
+</div>
+
+<script>
+
+function spieleTon(frequenz) {
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequenz;
+
+    oscillator.start();
+
+    gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+
+    gainNode.gain.exponentialRampToValueAtTime(
+        0.0001,
+        audioCtx.currentTime + 0.5
+    );
+
+    oscillator.stop(audioCtx.currentTime + 0.5);
+}
+
+</script>
+
+</body>
+</html>
